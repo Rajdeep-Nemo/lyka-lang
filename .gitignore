@@ -1,0 +1,33 @@
+# CMake Build Artifacts
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+CTestTestfile.cmake
+Testing/
+
+# Compiled Object Files & Libraries
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+revenar
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Editor/OS temporary files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*~
