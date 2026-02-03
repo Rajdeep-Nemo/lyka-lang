@@ -1,0 +1,10 @@
+fn main() -> {
+    i8 a = 6;
+    i32 b = 120;
+    f32 c = 2.5;
+    char d = 'a';
+    bool e = true;
+
+    print(a);
+    print(b);
+}
