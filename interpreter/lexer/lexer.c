@@ -165,17 +165,37 @@ bool match(const char expected)
     scanner.current++;
     return true;
 }
-//Helper function to check if it is a number literal
+//Helper function to check if it is a digit
 bool isDigit(const char c)
 {
     return c >= '0' && c <= '9';
 }
-//Helper function to check if it is a number literal
+//Helper function to check if it is an alphabet
 bool isAlpha(const char c)
 {
     return (c >= 'a' && c <= 'z') ||
            (c >= 'A' && c <= 'Z') ||
                c == '_';
+}
+//Helper function to check if it is a string literal inside double quotes
+static Token isString(void)
+{
+    while (peek() != '"' && !isAtEnd())
+    {
+        //If newline then line count is increased, thus allowing multiline string
+        if (peek() == '\n')
+        {
+            scanner.line++;
+        }
+        advance();
+    }
+    if (isAtEnd())
+    {
+        return errorToken("Unterminated string");
+    }
+    //Consume the closing quote
+    advance();
+    return createToken(TOKEN_STRING_LITERAL);
 }
 //Function to evaluate tokens
 Token scanToken(void)
@@ -202,7 +222,12 @@ Token scanToken(void)
         //Returns when an unexpected character is found
         //Operator
 
+    //⚠️⚠️⚠️ DO NOT TOUCH LINES BELOW
+    case '"':
+        return isString();
     default:
+        if (isDigit(c)) return number();
+        if (isAlpha(c)) return identifier();
         return errorToken("Unexpected character.");
     }
 }
