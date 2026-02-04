@@ -1,4 +1,4 @@
-fn main() -> {
+fn main() -> void {
     i32 x = 2;
     match (x) {
         (1) {

@@ -1,5 +1,5 @@
-fn main() -> {
-    mut i32 i = 0;
+fn main() -> void {
+    i32 x = 0;
 
     do {
         x = x + 1;
@@ -7,3 +7,4 @@ fn main() -> {
 
     print(x);
 }
+
