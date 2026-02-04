@@ -31,8 +31,6 @@ bool match(char expected);
 bool isDigit(char c);
 //Helper function to check if it is a number literal
 bool isAlpha(char c);
-//Helper function to check if it is a string literal
-static Token isString(void);
 //Function to evaluate tokens
 Token scanToken(void);
 //Function to manage the process
