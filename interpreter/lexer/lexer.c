@@ -1,12 +1,12 @@
 //
-//Copyright (c) 2026 RAJDEEP NEMO and SUJAY PAUL
+//Copyright (c) 2026 Rajdeep Nemo and Sujay Paul
 //
+#include "lexer.h"
 #include "token.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-
 //struct to iterate through the source code
 typedef struct
 {
@@ -165,6 +165,53 @@ bool match(const char expected)
     scanner.current++;
     return true;
 }
+//Helper function to check if it is a digit
+bool isDigit(const char c)
+{
+    return c >= '0' && c <= '9';
+}
+//Helper function to check if it is an alphabet
+bool isAlpha(const char c)
+{
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+               c == '_';
+}
+//Helper function to check if it is a character literal (Inside single quotes)
+static Token isCharLiteral(void)
+{
+    while (peek() != '\'' && !isAtEnd())
+    {
+        advance();
+    }
+    if (isAtEnd())
+    {
+        return errorToken("Unterminated character literal");
+    }
+    //Consume the closing quote
+    advance();
+    return createToken(TOKEN_CHAR_LITERAL);
+}
+//Helper function to check if it is a string literal (Inside double quotes)
+static Token isStringLiteral(void)
+{
+    while (peek() != '"' && !isAtEnd())
+    {
+        //If newline then line count is increased, thus allowing multiline string
+        if (peek() == '\n')
+        {
+            scanner.line++;
+        }
+        advance();
+    }
+    if (isAtEnd())
+    {
+        return errorToken("Unterminated string");
+    }
+    //Consume the closing quote
+    advance();
+    return createToken(TOKEN_STRING_LITERAL);
+}
 //Function to evaluate tokens
 Token scanToken(void)
 {
@@ -175,139 +222,30 @@ Token scanToken(void)
 
     const char c = advance();
     switch (c) {
-    //Single character symbols
+        //Single character symbols
     case ';':
         return createToken(TOKEN_SEMICOLON);
     case ',':
         return createToken(TOKEN_COMMA);
-    case ':':
-        return createToken(TOKEN_COLON);
-    //One or Two character operators
+        //One or Two character operators
     case '!':
         return createToken(match('=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
     case '=':
-        return createToken(match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);\
-    // case '-':
-    //     return createToken(match('>') ? TOKEN_ARROW : TOKEN_MINUS);
-    //9. Delimiters / Punctuation
-    case '(':
-        return createToken(TOKEN_LEFT_PAREN);
-    case ')':
-        return createToken(TOKEN_RIGHT_PAREN);
-    case '{':
-        return createToken(TOKEN_LEFT_BRACE);
-    case '}':
-        return createToken(TOKEN_RIGHT_BRACE);
-    case '[':
-        return createToken(TOKEN_LEFT_PAREN);
-    case ']':
-        return createToken(TOKEN_RIGHT_PAREN);
-    case '.':
-        return createToken(match('.')? TOKEN_DOT_DOT : TOKEN_DOT);
-    //8. Operators – Logical / Bitwise
-    case '&':
-        return createToken(match('&')? TOKEN_AND : TOKEN_BIT_AND);
-    case '|':
-        return createToken(match('|')? TOKEN_OR : TOKEN_BIT_OR);
-    case '^':
-        return createToken(TOKEN_BIT_XOR);
-    case '~':
-        return createToken(TOKEN_BIT_NOT);
-    case '<':
-        return createToken(match('<')? TOKEN_LESS : TOKEN_LEFT_SHIFT);
-    case '>':
-        return createToken(match('>')? TOKEN_GREATER : TOKEN_RIGHT_SHIFT);
-    //7. Operators – Comparison
-    // case '<':
-    //     return createToken(match('=')? TOKEN_LESS_EQUAL : TOKEN_LESS);
-    // case '>':
-    //     return createToken(match('=')? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
-    //6. Operators – Assignment
-    case '+':
-        return createToken(match('=') ? TOKEN_PLUS_EQUAL : TOKEN_PLUS);
+        return createToken(match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
     case '-':
-        return createToken(match('=') ? TOKEN_MINUS_EQUAL : TOKEN_MINUS);
-    case '*':
-        return createToken(match('=') ? TOKEN_STAR_EQUAL : TOKEN_STAR);
-    case '/':
-        createToken(match('=') ? TOKEN_SLASH_EQUAL : TOKEN_SLASH);
-    case '%':
-        createToken(match('=') ? TOKEN_MODULO_EQUAL : TOKEN_MODULO);
-    // case '%':
-    //     return createToken(match('%') ? TOKEN_ESCAPE : TOKEN_FORMAT_SPECIFIER);
-    //4. Type keywords
-    case 'i':
-        char nextI = peek();
-        if (nextI == '8') {
-            advance();
-            return createToken(TOKEN_I8);
-        }
-        else if (nextI == '1') {
-            advance();
-            if (peek() == '6') {
-                advance();
-                return createToken(TOKEN_I16);
-            }
-        }
-        else if (nextI == '3') {
-            advance();
-            if (peek() == '2') {
-                advance();
-                return createToken(TOKEN_I32);
-            }
-        }
-        else if (nextI == '6') {
-            advance();
-            if (peek() == '4') {
-                return createToken(TOKEN_I64);
-            }
-        }
-    case 'u':
-        char nextU = peek();
-        if (nextU == '8') {
-            advance();
-            return createToken(TOKEN_U8);
-        }
-        else if (nextU == '1') {
-            advance();
-            if (peek() == '6') {
-                advance();
-                return createToken(TOKEN_U16);
-            }
-        }
-        else if (nextU == '3') {
-            advance();
-            if (peek() == '2') {
-                advance();
-                return createToken(TOKEN_U32);
-            }
-        }
-        else if (nextU == '6') {
-            advance();
-            if (peek() == '4') {
-                advance();
-                return createToken(TOKEN_U64);
-            }
-        }
-    case 'f':
-        char nextF = peek();
-        if (nextF == '3') {
-            advance();
-            if (peek() == '2') {
-                advance();
-                return createToken(TOKEN_F32);
-            }
-        }
-        else if (nextF == '6') {
-            advance();
-            if (peek() == '4') {
-                advance();
-                return createToken(TOKEN_F64);
-            }
-        }
-    //Returns when an unexpected character is found
+            return createToken(match('>') ? TOKEN_ARROW : TOKEN_MINUS);
+        //Returns when an unexpected character is found
+        //Operator
+
+    //⚠️⚠️⚠️ DO NOT TOUCH LINES BELOW
+    case '\'':
+        return isCharLiteral();
+    case '"':
+        return isStringLiteral();
     default:
-         return errorToken("Unexpected character.");
+        //if (isDigit(c)) return number();
+        //if (isAlpha(c)) return identifier();
+        return errorToken("Unexpected character.");
     }
 }
 //Function to manage the process
