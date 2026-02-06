@@ -1,0 +1,66 @@
+//For signed datatype
+//byte datatype
+//syntax for declaration-> datatype variable_name;
+i8 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+i8 a = 10;
+
+//short datatype
+//syntax for declaration-> datatype variable_name;
+i16 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+i16 a = 10;
+
+//int datatype
+//syntax for declaration-> datatype variable_name;
+i32 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+i32 a = 10;
+
+//long datatype
+//syntax for declaration-> datatype variable_name;
+i64 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+i64 a = 10;
+
+
+//For unsigned datatype
+//byte datatype
+//syntax for declaration-> datatype variable_name;
+u8 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+u8 a = 10;
+
+//short datatype
+//syntax for declaration-> datatype variable_name;
+u16 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+u16 a = 10;
+
+//int datatype
+//syntax for declaration-> datatype variable_name;
+u32 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+u32 a = 10;
+
+//long datatype
+//syntax for declaration-> datatype variable_name;
+u64 a;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute a = 10;
+//syntax for declaration + initialization-> datatype variable_name = value;
+u64 a = 10;
