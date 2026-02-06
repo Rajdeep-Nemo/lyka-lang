@@ -1,0 +1,11 @@
+//For string datatype
+
+//static string
+//syntax for declaration + initialization-> datatype variable_name = value;
+string str = "hello, world!";
+
+//Dynamic string
+//syntax for declaration-> datatype variable_name;
+string str;
+//syntax for initialization-> mute variable_name assignment_operator(=) value;
+mute str = "hello, world";
