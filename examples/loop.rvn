@@ -1,0 +1,9 @@
+//For conditional statement
+
+//Syntax for 'loop'-> loop{ // Code to be executed //break; }
+mute i32 x;
+loop {
+    x = 5;
+    break;
+}
+printf("{}", x);
