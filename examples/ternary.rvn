@@ -1,0 +1,4 @@
+//One line conditional operator
+
+//Ternary operator syntax-> (condition) ? expression_if_true : expression_if_false;
+(10 < 20) ? print("20 is larger") : print("10 is larger");
