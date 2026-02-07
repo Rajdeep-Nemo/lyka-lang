@@ -2,7 +2,7 @@
 
 //static array
 //syntax for declaration-> datatype variable_name[size];
-i32 arrr[5];
+i32 arr[5];
 //syntax for initialization-> mute variable_name[index_number] assignment_operator(=) value;
 mute arr[0] = 10;
 mute arr[1] = 20;
