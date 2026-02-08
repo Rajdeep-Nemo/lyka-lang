@@ -1,15 +1,5 @@
-//For float datatype
-//syntax for declaration-> datatype variable_name;
-f32  a;
-//syntax for initialization-> mute variable_name assignment_operator(=) value;
-mute a = 10.5;
-//syntax for declaration + initialization-> datatype variable_name = value;
-f32 a = 10.5;
+// 32 bit floating type
+f32 a = 23.456;
 
-//For double datatype
-//syntax for declaration-> datatype variable_name;
-f64  a;
-//syntax for initialization-> mute variable_name assignment_operator(=) value;
-mute a = 10.5;
-//syntax for declaration + initialization-> datatype variable_name = value;
-f64 a = 10.5;
+// 64 bit floating type
+f64 b = 675.345;

@@ -1,8 +1,0 @@
-//For conditional statement
-
-//Syntax for 'do-while-loop'-> do { // Code to be executed } while(condition)
-mute i32 i = 1;
-do{
-    printf("{}\n",i);
-    i += 1;
-} while(i <= 10)

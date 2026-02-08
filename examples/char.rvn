@@ -1,7 +1,2 @@
-//For character datatype
-//syntax for declaration-> datatype variable_name;
-char ch;
-//syntax for initialization-> mute variable_name assignment_operator(=) value;
-mute ch = 'a';
-//syntax for declaration + initialization-> datatype variable_name = value;
-char ch = 'a';
+mut char symbol = '@';
+symbol = '$';
