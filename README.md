@@ -1,2 +1,2 @@
-# revenar-lang
-Revenar programming language
+# lyka-lang
+Lyka programming language
