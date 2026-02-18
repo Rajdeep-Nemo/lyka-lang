@@ -447,6 +447,7 @@ Token scanToken(void)
     case ',': return createToken(TOKEN_COMMA);
     case ':': return createToken(TOKEN_COLON);
     case ';': return createToken(TOKEN_SEMICOLON);
+    case '?': return createToken(TOKEN_QUESTION);
     case '.': return createToken(match('.') ? TOKEN_DOT_DOT : TOKEN_DOT);
         // Arithmetic & Assignment Operators
     case '+': return createToken(match('=') ? TOKEN_PLUS_EQUAL : TOKEN_PLUS);
