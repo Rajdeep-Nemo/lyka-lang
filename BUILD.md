@@ -1,4 +1,4 @@
-# Revenar Language Developer Guide
+# Lyka Language Developer Guide
 
 All terminal commands provided below are intended for the **Bash** shell.  
 Users on Windows should use WSL (Windows Subsystem for Linux) or Git Bash.
@@ -7,7 +7,7 @@ Users on Windows should use WSL (Windows Subsystem for Linux) or Git Bash.
 
 ## 1. Project Architecture
 
-The Revenar interpreter follows a classic modular compiler architecture aimed at maintainability and strict separation of concerns.  
+The Lyka interpreter follows a classic modular compiler architecture aimed at maintainability and strict separation of concerns.  
 The codebase is written in C11 and relies on CMake for build orchestration.
 
 ### Directory Breakdown
@@ -15,17 +15,35 @@ The codebase is written in C11 and relies on CMake for build orchestration.
 The project is organized into discrete modules, each handling a specific stage of the execution pipeline:
 
 ```text
-revenar-lang/
-├── CMakeLists.txt           # Master build configuration
-├── interpreter/             # Core implementation
-│   ├── main.c               # Entry point
-│   ├── common/              # Shared resources (Token definitions, Memory utils)
-│   ├── lexer/               # Lexical Analysis (Source Code -> Tokens)
-│   ├── parser/              # Semantic Analysis (Tokens -> AST)
-│   └── evaluator/           # Runtime Engine (AST execution & Environment)
-├── examples/                # Reference implementations (.rv files)
-├── tests/                   # Unit testing suite (Optional build)
-└── docs/                    # Technical specifications
+lyka-lang/
+├── shared/                       # THE FRONTEND
+│   ├── include/                  # Global Header Files
+│   │   ├── token.h               # Token definitions & Type enums
+│   │   ├── ast.h                 # LLVM-ready tree nodes (Expr & Stmt)
+│   │   ├── types.h               # Lyka type system (int, float, etc.)
+│   │   └── common.h              # Macros, memory management, & error types
+│   ├── lexer/                    # Lexical Analysis
+│   │   ├── lexer.c               # Character-to-token logic
+│   │   └── lexer.h               # Scanner interface
+│   └── parser/                   # Syntax Analysis
+│       ├── parser_shared.h       # ParserState struct & utility
+│       ├── parser_utils.c        # peek(), advance(), match(), consume()
+│       ├── expression.c          # Precedence-based math
+│       └── statement.c           # if, while, let, blocks
+├── interpreter/                  # BACKEND A: Tree-Walking Interpreter
+│   ├── src/
+│   │   ├── main.c                # Interpreter entry point
+│   │   ├── evaluator.c           # AST recursive visitor
+│   │   ├── environment.c         # Runtime symbol table (scopes)
+│   │   └── value.h               # Runtime representation of Raven data
+│   └── CMakeLists.txt            # Builds 'lyka' (Links shared/)
+├── compiler/                     # BACKEND B: LLVM Compiler
+    ├── src/
+    │   ├── main.cpp              # Compiler entry point (C++)
+    │   ├── codegen.cpp           # AST to LLVM IR conversion
+    │   ├── codegen.hpp           # Header for IR generation
+    │   └── llvm_utils.cpp        # LLVM context and optimization passes
+    └── CMakeLists.txt            # Builds 'lykac' (Finds LLVM, links shared/)
 ```
 
 ---
@@ -36,15 +54,35 @@ Before building, ensure the development environment has the necessary toolchain 
 
 ### Required Tools
 
-- **C Compiler**: GCC or Clang (supporting C11 standard)  
+#### Interpreter:
+- **C Compiler**: GCC or Clang (supporting C11 standard)
 - **Build System**: CMake 3.31+  
-- **Version Control**: Git  
+- **Version Control**: Git
+
+#### Compiler:
+- **C Compiler**: GCC or Clang (supporting C11 standard)
+- **C++ Compiler**: G++ or Clang++ (supporting C++17 standard)
+- **Build System**: CMake 3.31+  
+- **Build Generator**: Ninja (recommended) or GNU Make
+- **LLVM**: LLVM 17+ (development package with headers and CMake config)
+- **System Libraries (if required by LLVM build)**: zlib, zstd, curl, libedit
+- **Version Control**: Git
 
 ### Install Command (Debian/Ubuntu)
 
 ```bash
-sudo apt update
-sudo apt install build-essential cmake git
+sudo apt update && sudo apt install -y \
+  build-essential \
+  clang \
+  cmake \
+  ninja-build \
+  git \
+  llvm-19 \
+  llvm-19-dev \
+  zlib1g-dev \
+  libzstd-dev \
+  libcurl4-openssl-dev \
+  libedit-dev
 ```
 
 ---
@@ -55,7 +93,7 @@ An "out-of-source" build workflow is used to keep the source directories clean.
 
 ### A. Standard Build (For Users)
 
-This compiles the `revenar` executable optimized for release. It skips the testing suite to speed up compilation.
+This compiles the `lyka` executable optimized for release. It skips the testing suite to speed up compilation.
 
 1. **Initialize the Build Directory**
 
@@ -78,7 +116,7 @@ cmake --build .
 4. **Run the Interpreter**
 
 ```bash
-./interpreter/revenar
+./interpreter/lyka
 ```
 
 ### B. Developer Build (For Contributors)
@@ -90,7 +128,7 @@ Use this mode when adding features or fixing bugs.
 
 ```bash
 cd build
-cmake -DCMAKE_BUILD_TYPE=Debug -DREVENAR_BUILD_TESTS=ON ..
+cmake -DCMAKE_BUILD_TYPE=Debug -DLYKA_BUILD_TESTS=ON ..
 ```
 
 2. **Compile**

@@ -1,16 +1,19 @@
-# Build the libraries in order of dependency
-add_subdirectory(common)
-add_subdirectory(lexer)
-add_subdirectory(parser)
-add_subdirectory(evaluator)
+cmake_minimum_required(VERSION 3.31.6)
+project(Lyka_Interpreter C)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
-# Create the final executable
-add_executable(lyka main.c)
-
-# Link the executable to the modules
-target_link_libraries(lyka PRIVATE
-    lyka_evaluator
-    lyka_parser
-    lyka_lexer
-    lyka_common
+# Use PROJECT_SOURCE_DIR to keep paths absolute but relative to the project root
+include_directories(
+    ${PROJECT_SOURCE_DIR}/../shared/include
+    ${PROJECT_SOURCE_DIR}/../shared/lexer
+    ${PROJECT_SOURCE_DIR}/../shared/parser
+    src
 )
+
+file(GLOB SHARED_SOURCES
+    "../shared/lexer/*.c"
+    "../shared/parser/*.c"
+)
+
+add_executable(lyka src/main.c src/evaluator.c src/environment.c ${SHARED_SOURCES})
